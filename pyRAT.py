@@ -1,3 +1,9 @@
+"""
+This file is part of pyRAT, an antivirus evasion tool, written in python (https://github.com/nikosthem/pyRAT/) created by 
+Themelis Nikolaos (@nikosthem).
+For more info about pyRAT see the 'README.md' file.
+"""
+
 import subprocess, sys, os, pyclamd, peCloak
 from Tkinter import *
 from tkMessageBox import askquestion, showerror

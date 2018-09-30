@@ -77,6 +77,7 @@ def insert_options(var):
     Label(top, text='Local IP Address:').pack()
     ip = Entry(top,width=22, bg="lightblue")
     ip.pack()
+    ip.focus()
     Label(top, text='Local Port:').pack()
     port = Entry(top,width=22, bg="lightblue")
     port.pack()

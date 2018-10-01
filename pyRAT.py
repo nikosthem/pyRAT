@@ -171,6 +171,7 @@ def clamscan():
     check()
     
 
+
 def check():
           # Check with pyclamd if file is infected
           daemon = pyclamd.ClamdUnixSocket()
@@ -204,7 +205,7 @@ def peCloak():
 
 # Show success message after hiding
 def success():
-          tkMessageBox.showinfo("Final Check...","Wait and see the final ClamAV's results... ")
+          tkMessageBox.showinfo("Obfuscation succeeded...","Wait and see the final check with ClamAV... ")
           final_results()
 
 # Final results after scanning the obfuscated payload
@@ -224,12 +225,14 @@ def final_results():
 
 if __name__ == "__main__":
 	
-	
+        #stderr --> /dev/null
+	fd = os.open('/dev/null',os.O_WRONLY)
+        os.dup2(fd,2)
 	try:
            import msfrpc
         except:
            sys.exit(red(blink("Install the msfrpc library that can be found here: https://github.com/SpiderLabs/msfrpc.git")))
-  
+         
 	root=Tk()
 	root.title("pyRAT")
 	root.geometry("560x560+350+110")

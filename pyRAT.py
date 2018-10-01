@@ -183,7 +183,7 @@ def check():
                 process = subprocess.Popen(['clamscan', file_name], stdout=subprocess.PIPE)
                 stdout = process.communicate()[0]
                 Label(f4,text='Payload scanned:  {}'.format(stdout)).place(x=2,y=5)
-                tkMessageBox.showinfo("File infected!!!", "MALWARE : %s" % results)               
+                tkMessageBox.showerror("File infected!!!", "MALWARE : %s" % results)               
     	        Label(f4, text="Now we have to hide the payload in order to bypass the AVs!").place(x=2,y=280)
                 encode_button = Button(root,text="Hide Payload", bg='lightblue', state=ACTIVE, command=lambda:[peCloak(), rm(encode_button)])
                 encode_button.place(relx=0.5, rely=0.96,anchor=CENTER)

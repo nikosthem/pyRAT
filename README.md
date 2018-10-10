@@ -13,7 +13,7 @@ Download pyRAT by cloning the Git repository:
 ## Installation
 
 1. In order to make the application interact with the Metasploit Framework you have to connect to the RPC service. Download the msfrpc module from
-https://github.com/SpiderLabs/msfrpc/ and run in terminal inside python-msfrpc directory:
+https://github.com/SpiderLabs/msfrpc/ and run in terminal(inside python-msfrpc directory):
 * python setup.py install
 
 2. Download and install ClamAV with the command:

@@ -61,6 +61,7 @@ So, the user has to know prior to the use of pyRAT, the vulnerability that he is
 ## Built With
 
 * Python 2.7
+* Tkinter
 
 
 ## Versioning

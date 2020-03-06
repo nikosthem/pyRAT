@@ -1,6 +1,6 @@
 # pyRAT - An Antivirus Evasion Tool!
 
-**pyRAT** is an desktop tool, written in Python, which automates the **generation of Metasploit payload executables** that have the ability to invade systems without getting detected by most antivirus solutions. **pyRAT** meets all the requirements of usability and makes use of the **Metasploit Framework** along with its features. The exploitation process has the intention of gaining access to the vulnerable system by creating a **meterpreter session** between the user and the target system. **pyRAT** currently targets only Windows machines.
+**pyRAT** is a desktop tool, written in Python, which automates the **generation of Metasploit payload executables** that have the ability to invade systems without getting detected by most antivirus solutions. **pyRAT** meets all the requirements of usability and makes use of the **Metasploit Framework** along with its features. The exploitation process has the intention of gaining access to the vulnerable system by creating a **meterpreter session** between the user and the target system. **pyRAT** currently targets only Windows machines.
 
 
 ## Getting Started
@@ -46,7 +46,7 @@ So, the user has to know prior to the use of pyRAT, the vulnerability that he is
 
 ## Disclaimer
 
-**pyRAT** is developed, strictly, for **educational purposes** and its ultimate goal is to be a helpful tool during the process of a penetration test. Any other malicious or illegal usage of this tool is not recommended and it does not represent the purpose of thsi research. Overall, this work can provide a great learning opportunity in the area of ethical hacking using penetration testing.
+**pyRAT** is developed, strictly, for **educational purposes** and its ultimate goal is to be a helpful tool during the process of a penetration test. Any other malicious or illegal usage of this tool is not recommended and it does not represent the purpose of this research. Overall, this work can provide a great learning opportunity in the area of ethical hacking using penetration testing.
 
 
 ## Prerequisites
